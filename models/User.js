@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    phoneNo:{
+        type:Number,
+        unique:true
+    },
     email: {
         type: String,
         required: true,
@@ -16,6 +20,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profile_pic:{
+        type:String,
+    },
+    dob:{
+        type:Date,
+        default:null
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -23,6 +34,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
+//This is like event execute every time when we save something in mongoDB User collection
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('password')) {
         return next();
@@ -37,6 +49,7 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Method to compare password
+//This is custom mongoosh method so we can use User.compare password when we want to compare password
 UserSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
